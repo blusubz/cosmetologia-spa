@@ -257,12 +257,12 @@ def admin_logout():
 
 # ----- Create tables and run app -----
 if __name__ == "__main__":
-    # Create tables inside the app context 
     with app.app_context():
         db.create_all()
 
-    # only used if you run `python3 app.py`
-    app.run(debug=False) # True for testing / False for deployment  
+    # Use Render's port and 0.0.0.0 for external access
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
 
 ''' 
 TODO: 
