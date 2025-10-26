@@ -1,0 +1,240 @@
+:root {
+    --gold: #DAA520;
+    --black: #000000;
+    --white: #ffffff;
+}
+
+
+body {
+    background-color: var(--black) !important; /* override bootstrap*/
+}
+
+
+h1 {
+    text-align: center;
+    color: var(--gold);
+    font-size: 80px;
+}
+
+h2 {
+    text-align: center;
+    color: var(--gold);
+    font-family: "Brush Script MT", cursive;
+    font-size: 48px;
+    text-decoration: underline;
+    text-decoration-thickness: 5px; /* thick underline */
+    text-underline-offset: 15px; /* spacing between text and underline */
+}
+
+h3 {
+    text-align: center;
+    color: white;
+    font-size: 36px;
+}
+
+.btn-gold {
+    background-color: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-gold:hover {
+    background-color: #FFEA00; /* slightly brighter gold */
+    transform: translateY(-2px);
+}
+
+.text-gold {
+    color: var(--gold);
+}
+
+.text-white {
+    color: var(--white);
+}
+
+.section-padding {
+    padding: 80px 20px; /* top/bottom spacing */
+}
+
+.section-divider {
+    border-top: 2px solid var(--gold);
+    margin: 60px 0;
+}
+
+.hero-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* fill most of the screen */
+    text-align: center;
+}
+
+
+/* services-cntainers might need to be removed as this was for the original html file*/
+.services-container {
+    display: flex; /* make columns side by side */
+    justify-content: center; /* center columns */
+    gap: 50px;
+}
+
+.services-container ul {
+    list-style-type: disc;
+    color: var(--gold);
+    font-size: 24px;
+    padding-left: 40px; /* bullent indentation */
+}
+
+.services-container ul li {
+    margin: 10px 0;
+}
+
+.services-container ul li::marker {
+    color: white;
+}
+
+footer h4 {
+    color: var(--white);
+    font-size: 24px;
+    text-align: center;
+}
+
+footer a {
+    text-decoration: none;
+    margin-left: 10px; /* space between icon and phone-number */
+    color: white;
+}
+
+footer .icon {
+    width: 24px; /* adjust size */
+    height: 24px;
+    vertical-align: middle; /* align with text */
+}
+
+blockquote {
+    color: var(--white); /* make the text visible */
+    font-style: italic;
+    font-size: 22px;
+    border-left: 4px solid var(--gold); /* elegant gold accent bar */
+    padding-left: 15px;
+    margin: 20px auto;
+    max-width: 500px; /* keep it narrow and elegant */
+    line-height: 1.6;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px;
+
+}
+
+p {
+    color: var(--white); /* make the text visible */
+    font-style: italic;
+    font-size: 18px;
+    padding-left: 15px;
+    margin: 20px auto;
+    max-width: 500px; /* keep it narrow and elegant */
+    line-height: 1.6;
+}
+
+.table th, td {
+    text-align: center;
+}
+
+/* Style the new hero logo */
+img[src="/static/images/new_logo.png"] {
+    display: block;
+    margin: 20px auto;
+    width: 750px;
+    height: auto;
+}
+
+
+@media (max-width: 768px) {
+    img[src="/static/images/new_logo.png"] {
+        width: 350px; /* smaller on mobile */
+    }
+}
+
+/* Slightly smaller Agendar Ahora button on mobile */
+@media (max-width: 767px) {
+    .btn-gold {
+        padding: 8px 16px; /* slightly smaller padding */
+        font-size: 16px;   /* slightly smaller font */
+    }
+}
+
+
+/* Carousel */
+#reviewsCarousel .carousel-indicators {
+    bottom: -20px; /* moves the dots below the quote & name */
+}
+
+#reviewsCarousel .carousel-indicators button {
+    border-radius: 35%;
+    background-color: var(--gold); /* gold */
+    opacity: 0.7;
+}
+
+#reviewsCarousel .carousel-indicators .active {
+    opacity: 1;
+}
+
+
+/* for mobile */
+#reviewsCarousel .carousel-inner {
+    min-height: 120px; /* optional for consistent height */
+}
+
+#reviewsCarousel blockquote {
+    font-size: 1rem; /* smaller on mobile */
+}
+
+@media (min-width: 768px) {
+    #reviewsCarousel blockquote {
+        font-size: 1.25rem; /* larger on tablet+ */
+    }
+}
+
+
+/* ON success booking, create glitter effect */
+/* .glitter {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background-color: #FFD700;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 1;
+    animation: fall 3.2s ease-out forwards;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+} */
+
+.sparkle {
+    position: fixed;
+    background: radial-gradient(circle, #FFD700 0%, #B8860B 100%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    animation: sparkle 5s forwards;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+}

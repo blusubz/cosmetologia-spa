@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+
+{% block title %} 
+    Cosmetología | Paola S. 
+{% endblock %} 
+
+{% block content %} 
+    <!-- 1. Hero / Welcome section -->
+    <section id="hero" class="hero-center">
+        <!-- <img src="{{ url_for('static', filename='images/paola_logo.PNG') }}" alt="Logo" class="mb-3" style="width: 150px;">  -->
+        
+        <!-- <h1 class="display-4 fw-bold text-gold">Cosmetóloga</h1>
+        <h2 class="fw-light">Paola Sanchez</h2> -->
+
+        <img src="{{ url_for('static', filename='images/new_logo.png') }}" alt="Logo">
+
+        <br><br><br>   
+        <button class="btn-gold" onclick="scrollToBooking()">Agendar Ahora</button>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- 2. Services section -->
+    <section id="services" class="py-5">
+    <h3 class="text-center mb-4">Servicios</h3>
+
+    <div class="services-container">
+        <ul>
+            <li>Higiene Facial</li>
+            <li>Yesoterapia</li>
+            <li>Masaje Reductor</li>
+            <li>Drenaje Linfático</li>
+        </ul>
+        <ul>    
+            <li>Masaje Relajación</li>
+            <li>Depilación con Cera</li>
+            <li>Pestañas Punto a Punto</li>
+        </ul>
+    </div>
+
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- 3. Booking section -->
+    <!-- name, service, date and time -->
+    <section id="booking">
+        <h3>Agenda tu cita</h3>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} mt-3 text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+            
+        <!-- Booking form: for full submission -->
+        <form class="w-50 mx-auto mt-4" method="POST" action="/book">
+            <div class="mb-3">
+                <input  name="name" type="text" class="form-control" placeholder="Tu nombre completo" value="{{ name|default('') }}">
+            </div>
+
+            <div class="mb-3">
+                <select name="service" class="form-select">
+                    <option selected disabled>Selecciona un servicio</option>
+                    <option {% if service == 'Higiene Facial' %}selected{% endif %}>Higiene Facial</option>
+                    <option {% if service == 'Yesoterapia' %}selected{% endif %}>Yesoterapia</option>
+                    <option {% if service == 'Masaje Reductor' %}selected{% endif %}>Masaje Reductor</option>
+                    <option {% if service == 'Drenaje Linfático' %}selected{% endif %}>Drenaje Linfático</option>
+                    <option {% if service == 'Masaje Relajación' %}selected{% endif %}>Masaje Relajación</option>
+                    <option {% if service == 'Depilación con Cera' %}selected{% endif %}>Depilación con Cera</option>
+                    <option {% if service == 'Pestañas Punto a Punto' %}selected{% endif %}>Pestañas Punto a Punto</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <input name="date" type="date" id="date-input" class="form-control" value="{{ date|default('') }}" min="{{ today }}" placeholder="Fecha">
+            </div>
+            
+            <div class="mb-3">
+                <select name="time" class="form-select" id="time-select">
+                    <option selected disabled>Selecciona una hora</option>
+                    {% for hour in range(9, 18) %}
+                        {% set label = hour if hour <= 12 else hour - 12 %}
+                        {% set period = "AM" if hour < 12 else "PM" %}
+                        {% set hour_str = '%02d:00'|format(hour) %}
+                        <option value="{{ hour_str }}"
+                            {% if hour_str in booked_times %}disabled{% endif %}
+                            {% if time == hour_str %}selected{% endif %}>
+                            {{ label }} {{ period }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Confirmar</button>
+            </div>
+        </form>
+
+        <p style="text-align: center; color: #DAA520">Lunes - Viernes <br> 9am - 5pm</p>
+    </section>
+
+
+    <hr class="section-divider">
+
+    <!-- 4. Reviews section -->
+    <section id="reviews" class="py-5">
+        <h3 class="text-center mb-4">Reseñas</h3>
+
+        <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+            <!-- Carousel indicators (dots) -->
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="2"></button>
+            </div>
+
+            <!-- Carousel items -->
+            <div class="carousel-inner text-center">
+                <div class="carousel-item active">
+                    <blockquote class="blockquote">
+                        "Excelente servicio, súper profesional!"
+                    </blockquote>
+                    <p>- Olivia L.</p>
+                </div>
+                <div class="carousel-item">
+                    <blockquote class="blockquote">
+                        "Mi piel quedó increíble después del facial."
+                    </blockquote>
+                    <p>- Michael S.</p>
+                </div>
+                <div class="carousel-item">
+                    <blockquote class="blockquote">
+                        "Uno de los mejores SPA que he visitado 😀"
+                    </blockquote>
+                    <p>- Karla M.</p>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </section>
+
+
+    <hr class="section-divider">
+
+{% endblock %}
+
+<!-- 5. Contact Section -->
+{% block footer %}
+    {{ super() }}
+    <br><br>
+    <a href="{{ url_for('admin_login') }}" style="color:#1fcb67; text-decoration:underline;">Acceso de administración</a>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+        function scrollToBooking() {
+            const bookingSection = document.getElementById('booking');
+            if (bookingSection) {
+                bookingSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Scroll to booking if flask message exits 
+        document.addEventListener('DOMContentLoaded', () => {
+            const flashAlerts = document.querySelectorAll('#booking .alert');
+
+            if(flashAlerts.length > 0) {
+                scrollToBooking();
+            }
+            
+            // Fade out flash messages after 4 seconds
+            flashAlerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+
+                    // Remove the element after the transition
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500) // match the duration of the CSS transition
+                }, 4000); // wait 4 sec before startgin fade
+            });
+
+            // ----- New: AJAX update for available times ----- 
+            const dateInput = document.querySelector("#date-input");
+            const timeSelect = document.querySelector("#time-select");
+            
+            if(dateInput && timeSelect) {
+                dateInput.addEventListener("change", async () => {
+                    const date = dateInput.value;
+                    if(!date) return;
+
+                    const response = await fetch(`/available-times?date=${date}`);
+                    const times = await response.json();
+
+                    // Clear current options and add default 
+                    timeSelect.innerHTML = '<option value ="" selected disabled>Selecciona una hora</option>'
+
+                    if(times.length === 0) {
+                        // Show friendly message if no hours are available
+                        const option = document.createElement("option");
+                        option.textContent = "No hay horas disponibles";
+                        option.disabled = true;
+                        option.selected = true;
+                        timeSelect.appendChild(option);
+                        return; // return else to add 
+                    }
+
+                    // Add available hours 
+                    times.forEach(hour => {
+                        const hourNum = parseInt(hour.split(":")[0]);
+                        const label = hourNum <= 12 ? hourNum : hourNum - 12;
+                        const period = hourNum < 12 ? "AM" : "PM";
+
+                        const option = document.createElement("option");
+                        option.value = hour;
+                        option.textContent = `${label} ${period}`;
+                        timeSelect.appendChild(option);
+                    });
+                });
+            }
+        });
+
+        // Add glitter effect on successful booking
+        document.addEventListener('DOMContentLoaded', () => {
+            const flashAlerts = document.querySelectorAll('#booking .alert');
+
+            flashAlerts.forEach(alert => {
+                if (alert.classList.contains('alert-success')) {
+                    // Trigger glitter effect
+                    createSparkles(150); // 30 particles
+                }
+
+                // Fade out flash messages after 4 seconds (existing)
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }, 4000);
+            });
+        });
+
+        function createSparkles(count) {
+            for (let i = 0; i < count; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+
+                // Random position across entire screen
+                sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                sparkle.style.top = Math.random() * window.innerHeight + 'px';
+
+                // Random size
+                const size = Math.random() * 6 + 4; // 4px - 10px
+                sparkle.style.width = size + 'px';
+                sparkle.style.height = size + 'px';
+
+                // Random animation delay
+                sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+
+                document.body.appendChild(sparkle);
+
+                // Remove after animation ends
+                sparkle.addEventListener('animationend', () => sparkle.remove());
+            }
+        }
+
+   
+        document.addEventListener('DOMContentLoaded', () => {
+            const bookingForm = document.querySelector('form[action="/book"]');
+
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', async (e) => {
+                    e.preventDefault(); // Stop full page reload
+
+                    const formData = new FormData(bookingForm);
+
+                    // Send form data via fetch to /book
+                    const response = await fetch('/book', {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    // Remove any previous alerts
+                    document.querySelectorAll('#booking .alert').forEach(a => a.remove());
+
+                    // Create alert dynamically
+                    const alert = document.createElement('div');
+                    alert.className = `alert alert-${result.status === 'success' ? 'success' : 'danger'} mt-3 text-center`;
+                    alert.textContent = result.message;
+
+                    bookingForm.insertAdjacentElement('beforebegin', alert);
+
+                    // If success, clear form fields
+                    if (result.status === 'success') {
+                        bookingForm.reset();
+                        createSparkles(150);
+                    }
+
+                    // Auto-fade message
+                    setTimeout(() => {
+                        alert.style.transition = 'opacity 0.5s';
+                        alert.style.opacity = '0';
+                        setTimeout(() => alert.remove(), 500);
+                    }, 4000);
+                });
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %} 
+    Actualizar Cita | Paola S. 
+{% endblock %}
+
+{% block content %} 
+    <section id="booking">
+        <h3 class="text-center mb-4">Editar Cita</h3>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} mt-3 text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form class="w-50 mx-auto mt-4" method="POST" action="/update/{{ booking.id }}">
+            <div class="mb-3">
+                <input name="name" type="text" class="form-control" placeholder="Tu nombre completo" 
+                       value="{{ booking.name }}">
+            </div>
+
+            <div class="mb-3">
+                <select name="service" class="form-select">
+                    <option disabled>Selecciona un servicio</option>
+                    {% for s in ['Higiene Facial', 'Yesoterapia', 'Masaje Reductor', 'Drenaje Linfático', 'Masaje Relajación', 'Depilación con Cera', 'Pestañas Punto a Punto'] %}
+                        <option value="{{ s }}" {% if booking.service == s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <input name="date" type="date" id="date-input" class="form-control" value="{{ booking.date }}">
+            </div>
+            
+            <div class="mb-3">
+                <select name="time" class="form-select" id="time-select">
+                    {% for hour in range(9, 18) %}
+                        {% set label = hour if hour <= 12 else hour - 12 %}
+                        {% set period = "AM" if hour < 12 else "PM" %}
+                        {% set hour_str = '%02d:00'|format(hour) %}
+                        <option value="{{ hour_str }}" {% if booking.time == hour_str %}selected{% endif %}>
+                            {{ label }} {{ period }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+                <a href="{{ url_for('bookings') }}" class="btn btn-secondary ms-2">Cancelar</a>
+            </div>
+        </form>
+
+        <p style="text-align: center; color: #FFD700">Lunes - Viernes <br> 9am - 5pm</p>
+    </section>
+{% endblock %}
